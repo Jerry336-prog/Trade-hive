@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ---------------------------------------------------------
+    // USERS
+    // Users can only read and write their own profile data
+    // ---------------------------------------------------------
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // ---------------------------------------------------------
+    // STORES
+    // Anyone can read stores. Only the owner can create/update
+    // ---------------------------------------------------------
+    match /stores/{storeId} {
+      allow read: if true;
+      allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
+      allow update: if request.auth != null && resource.data.ownerId == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
+    }
+
+    // ---------------------------------------------------------
+    // PRODUCTS
+    // Anyone can read products. Only the vendor can create/update
+    // ---------------------------------------------------------
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if request.auth != null && request.resource.data.vendorId == request.auth.uid;
+      allow update: if request.auth != null && (
+        resource.data.vendorId == request.auth.uid ||
+        (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(["stock"]) &&
+          request.resource.data.stock is number &&
+          request.resource.data.stock >= 0 &&
+          request.resource.data.stock <= resource.data.stock
+        )
+      );
+      allow delete: if request.auth != null && resource.data.vendorId == request.auth.uid;
+    }
+
+    // ---------------------------------------------------------
+    // CARTS
+    // Users can only read and write their own cart documents
+    // ---------------------------------------------------------
+    match /carts/{cartId} {
+      // Assuming cartId is identical to userId
+      allow read, write: if request.auth != null && request.auth.uid == cartId;
+    }
+
+    // ---------------------------------------------------------
+    // ORDERS
+    // Customers can read their own orders.
+    // Vendors can read orders addressed to them.
+    // Customers create orders. Vendors can update their status.
+    // ---------------------------------------------------------
+    match /orders/{orderId} {
+      allow create: if request.auth != null && request.resource.data.customerId == request.auth.uid;
+      
+      allow read: if request.auth != null && (
+        resource.data.customerId == request.auth.uid || 
+        resource.data.vendorId == request.auth.uid
+      );
+      
+      allow update: if request.auth != null && resource.data.vendorId == request.auth.uid;
+    }
+  }
+}
