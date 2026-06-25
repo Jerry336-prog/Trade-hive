@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 48" role="img" aria-labelledby="title desc">
+  <title id="title">TradeHive</title>
+  <desc id="desc">TradeHive multi-vendor marketplace logo</desc>
+  <g>
+    <rect width="48" height="48" rx="12" fill="#0d1117"/>
+    <path d="M13.5 22.2 24 13.5l10.5 8.7V36h-21V22.2Z" fill="#00d4b8"/>
+    <path d="M18 36V25.5h12V36" fill="#0d1117"/>
+    <path d="M15.8 20.3h16.5l-3-6H18.8l-3 6Z" fill="#7c3aed"/>
+    <path d="M18 21v3.6a3 3 0 1 1-6 0V21h6Zm6 0v3.6a3 3 0 1 1-6 0V21h6Zm6 0v3.6a3 3 0 1 1-6 0V21h6Zm6 0v3.6a3 3 0 1 1-6 0V21h6Z" fill="#ffffff"/>
+  </g>
+  <text x="58" y="31" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800">Trade</text>
+  <text x="123" y="31" fill="#00d4b8" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800">Hive</text>
+</svg>
